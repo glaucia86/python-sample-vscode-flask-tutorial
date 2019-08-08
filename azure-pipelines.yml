@@ -1,3 +1,4 @@
+# This is the completed azure-pipelines.yaml file from previous steps.
 variables:
   ConnectedServiceName: 'Azure Primary'
   WebAppName: 'glauwebsite-flaskpipelines'
@@ -6,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Hosted Ubuntu 1604
 
 steps:
 - task: UsePythonVersion@0
@@ -30,8 +31,6 @@ steps:
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/Application$(Build.BuildId).zip'
     replaceExistingArchive: true
-    verbose: # Optional
-
 
 - task: AzureRMWebAppDeployment@4
   displayName: Azure App Service Deploy
@@ -42,7 +41,7 @@ steps:
     WebAppName: $(WebAppName)
     Package: '$(Build.ArtifactStagingDirectory)/Application$(Build.BuildId).zip'
 
-    StartupCommand: 'gunicorn --bind=0.0.0.0 --workers=4 startup:app'
+    # The following command is specific to the python-sample-vscode-flask-tutorial code.
+    # You may or may not need a startup command for your own app.
 
-    # The following parameter is specific to the Flask example code. You may
-    # or may not need a startup command for your own app.
+    StartupCommand: 'gunicorn --bind=0.0.0.0 --workers=4 startup:app'
